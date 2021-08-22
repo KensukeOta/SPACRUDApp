@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/', function() {
     return "helloworld";
+});
+
+Route::group(["middleware" => "api"], function () {
+    Route::post('/login', [LoginController::class, 'login']);
+    Route::get('/current_admin_user', function () {
+        return Auth::user();
+    });
 });
