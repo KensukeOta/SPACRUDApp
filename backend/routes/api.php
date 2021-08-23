@@ -29,6 +29,6 @@ Route::group(["middleware" => "api"], function () {
         return Auth::user();
     });
     Route::group(['middleware' => ['auth:api']], function () {
-        
+        Route::apiResource('admin_users', 'App\Http\Controllers\Api\AdminUserController')->except(['show']);
     });
 });
