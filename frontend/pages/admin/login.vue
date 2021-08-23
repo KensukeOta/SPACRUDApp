@@ -1,23 +1,18 @@
 <template>
   <section>
-    <h1>Login</h1>
-    <form @submit.prevent="submit">
-      <div>
-        <label for="email">email</label>
-        <input type="text" id="email" v-model="email" />
-      </div>
-      <div>
-        <label for="password">password</label>
-        <input type="password" id="password" v-model="password" />
-      </div>
-      <button type="submit">login</button>
-    </form>
+    <h1 class="display-1 mt-5">管理者ログイン</h1>
+    <v-form @submit.prevent="submit">
+      <v-text-field label="メールアドレス" v-model="email" />
+      <v-text-field type="password" label="パスワード" v-model="password" />
+      <v-btn type="submit" class="info">ログイン</v-btn>
+    </v-form>
   </section>
 </template>
 
 <script>
 export default {
   middleware: 'logined_admin_user',
+  layout: 'admin_login',
   data () {
     return {
       email: '',
