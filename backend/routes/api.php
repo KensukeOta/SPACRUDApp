@@ -28,4 +28,7 @@ Route::group(["middleware" => "api"], function () {
     Route::get('/current_admin_user', function () {
         return Auth::user();
     });
+    Route::group(['middleware' => ['auth:api']], function () {
+        
+    });
 });
