@@ -61,6 +61,14 @@
             mdi-pencil
           </v-icon>
         </template>
+        <template v-slot:item.delete-action="{ item }">
+          <v-icon
+            small
+            @click="onClickDeleteIcon(item)"
+          >
+            mdi-delete
+          </v-icon>
+        </template>
       </v-data-table>
     </v-card>
   </v-layout>
@@ -103,6 +111,9 @@ export default {
     onClickEditIcon (adminUser) {
       this.dialogAdminUser = Object.assign({}, adminUser)
       this.isShowDialog = true
+    },
+    async onClickDeleteIcon (adminUser) {
+      await this.$store.dispatch('adminUsers/delete', adminUser)
     },
     async onClickUpdateBtn () {
       await this.$store.dispatch('adminUsers/update', this.dialogAdminUser)

@@ -12,6 +12,13 @@ export const mutations = {
   setList(state, data) {
     state.adminUsers = data
   },
+  delete(state, data) {
+    state.adminUsers.forEach((adminUser, index) => {
+      if (adminUser.id === data.id) {
+        state.adminUsers.splice(index, 1)
+      }
+    })
+  },
   update(state, data) {
     state.adminUsers.forEach((adminUser, index) => {
       if (adminUser.id === data.id) {
@@ -27,6 +34,13 @@ export const actions = {
       .catch(err => {
         console.log(err)
       })
+  },
+  async delete({ commit }, adminUser) {
+    const response = await this.$axios.$delete(`/admin_users/${adminUser.id}`)
+      .catch(err => {
+        console.log(err)
+      })
+    commit('delete', response)
   },
   async update({ commit }, adminUser) {
     const response = await this.$axios.$patch(`/admin_users/${adminUser.id}`, adminUser)
