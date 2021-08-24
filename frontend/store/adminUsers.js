@@ -12,6 +12,9 @@ export const mutations = {
   setList(state, data) {
     state.adminUsers = data
   },
+  create(state, data) {
+    state.adminUsers.push(data)
+  },
   delete(state, data) {
     state.adminUsers.forEach((adminUser, index) => {
       if (adminUser.id === data.id) {
@@ -34,6 +37,13 @@ export const actions = {
       .catch(err => {
         console.log(err)
       })
+  },
+  async create({ commit }, adminUser) {
+    const response = await this.$axios.$post('/admin_users', adminUser)
+      .catch(err => {
+        console.log(err)
+      })
+    commit('create', response)
   },
   async delete({ commit }, adminUser) {
     const response = await this.$axios.$delete(`/admin_users/${adminUser.id}`)

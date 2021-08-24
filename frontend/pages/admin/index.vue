@@ -25,9 +25,18 @@
       >
         <template v-slot:top>
           <v-dialog v-model="isShowDialog" max-width="500px">
+            <template v-slot:activator>
+              <v-btn fab dark color="pink" class="mb-2"
+                @click="onClickAddBtn"
+              >
+                <v-icon dark>
+                  mdi-plus
+                </v-icon>
+              </v-btn>
+            </template>
             <v-card>
               <v-card-title>
-                <span class="headline">管理者編集</span>
+                <span class="headline">{{ formTitle }}</span>
               </v-card-title>
               <v-card-text>
                 <v-container>
@@ -47,7 +56,8 @@
               <v-card-actions>
                 <v-spacer />
                 <v-btn @click="closeDialog">閉じる</v-btn>
-                <v-btn class="primary" @click="onClickUpdateBtn">更新する</v-btn>
+                <v-btn v-if="isPersistedAdminUser" class="primary" @click="onClickUpdateBtn">更新する</v-btn>
+                <v-btn v-else class="primary" @click="onClickCreateBtn">追加する</v-btn>
                 <v-spacer />
               </v-card-actions>
             </v-card>
@@ -93,6 +103,9 @@ export default {
     adminUsers () {
       return this.$store.getters['adminUsers/list']
     },
+    formTitle () {
+      return this.isPersistedAdminUser ? '管理者編集' : '管理者追加'
+    },
     headers () {
      return [
         { text: 'ID', value: 'id' },
@@ -101,16 +114,29 @@ export default {
         { text: '', value: 'edit-action' },
         { text: '', value: 'delete-action' },
       ]
-    }
+    },
+    isPersistedAdminUser () {
+      return !!this.dialogAdminUser.id
+    },
   },
   methods: {
     closeDialog () {
-      this.dialogAdminUser = {}
       this.isShowDialog = false
+      setTimeout(() => {
+        this.dialogAdminUser = {}
+      }, 1000)
+    },
+    onClickAddBtn () {
+      this.dialogAdminUser = {}
+      this.isShowDialog = true
     },
     onClickEditIcon (adminUser) {
       this.dialogAdminUser = Object.assign({}, adminUser)
       this.isShowDialog = true
+    },
+    async onClickCreateBtn () {
+      await this.$store.dispatch('adminUsers/create', this.dialogAdminUser)
+      this.closeDialog()
     },
     async onClickDeleteIcon (adminUser) {
       await this.$store.dispatch('adminUsers/delete', adminUser)
