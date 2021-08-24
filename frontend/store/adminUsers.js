@@ -11,6 +11,13 @@ export const getters = {
 export const mutations = {
   setList(state, data) {
     state.adminUsers = data
+  },
+  update(state, data) {
+    state.adminUsers.forEach((adminUser, index) => {
+      if (adminUser.id === data.id) {
+        state.adminUsers.splice(index, 1, data)
+      }
+    })
   }
 }
 
@@ -20,5 +27,12 @@ export const actions = {
       .catch(err => {
         console.log(err)
       })
+  },
+  async update({ commit }, adminUser) {
+    const response = await this.$axios.$patch(`/admin_users/${adminUser.id}`, adminUser)
+      .catch(err => {
+        console.log(err)
+      })
+    commit('update', response)
   }
 }
